@@ -1,18 +1,17 @@
 ---
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yml"
+- include: tasks/oah-install.yml
+  when: oah_command == "install"
 
-- name: Define java_packages.
-  set_fact:
-    java_packages: "{{ __java_packages | list }}"
-  when: java_packages is not defined
+- include: tasks/oah-update.yml
+  when: oah_command == "update"
 
-# Setup/install tasks.
-- include: setup-RedHat.yml
-  when: ansible_os_family == 'RedHat'
+- include: tasks/oah-remove.yml
+  when: oah_command == "remove"
 
-- include: setup-Debian.yml
-  when: ansible_os_family == 'Debian'
+- include: tasks/oah-reset.yml
+  when: oah_command == "reset"
 
-- include: setup-FreeBSD.yml
-  when: ansible_os_family == 'FreeBSD'
+- include: tasks/oah-validate.yml
+  when: oah_command == "validate"
+
+#- include: tasks/oah-{{ oah_command }}.yml
